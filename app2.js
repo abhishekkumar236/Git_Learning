@@ -1,5 +1,9 @@
-let listItems = document.querySelectorAll(".list-group-item");
+// Change font color to green for the 2nd item in the item list
+let secondItem = document.querySelectorAll("#items li")[1];
+secondItem.style.color = "green";
 
-listItems[1].style.backgroundColor = "green";
-
-listItems[2].style.display = "none";
+// Choose all odd elements and change their background to green
+let oddItems = document.querySelectorAll("#items li:nth-child(odd)");
+oddItems.forEach((item) => {
+  item.style.backgroundColor = "green";
+});
