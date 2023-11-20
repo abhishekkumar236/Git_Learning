@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>JS For Beginners</title>
+  </head>
+  <body>
+    <section class="container">
+      <form id="my-form">
+        <h1>Add User</h1>
+        <div class="msg"></div>
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" id="name" />
+        </div>
+        <div>
+          <label for="email">Email:</label>
+          <input type="text" id="email" />
+        </div>
+        <input class="btn" type="submit" value="Submit" />
+      </form>
+
+      <ul id="users"></ul>
+    </section>
+
+    <script>
+      const form = document.getElementById("my-form");
+      const usersList = document.getElementById("users");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const nameInput = document.getElementById("name");
+        const emailInput = document.getElementById("email");
+
+        // Get input values
+        const name = nameInput.value;
+        const email = emailInput.value;
+
+        if (name.trim() === "" || email.trim() === "") {
+          alert("Please enter valid values for Name and Email");
+          return;
+        }
+
+        // Create user object
+        const user = {
+          name,
+          email,
+        };
+
+        // Check if there are already stored users
+        let users = localStorage.getItem("users");
+        users = users ? JSON.parse(users) : [];
+
+        // Add new user
+        users.push(user);
+
+        // Store updated users in local storage
+        localStorage.setItem("users", JSON.stringify(users));
+
+        // Clear form fields
+        nameInput.value = "";
+        emailInput.value = "";
+
+        // Render users in the list
+        renderUsers(users);
+      });
+
+      function renderUsers(users) {
+        usersList.innerHTML = users
+          .map(
+            (user, index) =>
+              `<li key=${index}>Name: ${user.name}, Email: ${user.email} <button onclick="deleteUser(${index})">Delete</button></li>`
+          )
+          .join("");
+      }
+
+      // Function to delete a user
+      function deleteUser(index) {
+        let users = localStorage.getItem("users");
+        users = users ? JSON.parse(users) : [];
+
+        // Remove user from the list
+        users.splice(index, 1);
+
+        // Update local storage
+        localStorage.setItem("users", JSON.stringify(users));
+
+        // Re-render the updated list
+        renderUsers(users);
+      }
+
+      // Display existing users on page load
+      const existingUsers = localStorage.getItem("users");
+      if (existingUsers) {
+        renderUsers(JSON.parse(existingUsers));
+      }
+    </script>
+  </body>
+</html>
